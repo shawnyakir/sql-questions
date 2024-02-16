@@ -1,0 +1,45 @@
+WITH javascript_posts AS (
+  SELECT 
+    COUNT(*) AS total_posts,
+    SUM(CASE WHEN answer_count >= 1 THEN 1 ELSE 0 END) AS answer_more_than_one,
+    AVG(answer_count) AS average_answers,
+    AVG(view_count) AS average_views,
+    AVG(score) AS average_score
+    
+  FROM
+    `bigquery-public-data.stackoverflow.posts_questions`
+  WHERE 
+    LOWER(tags) LIKE '%javascript%'
+),
+java_posts AS (
+  SELECT 
+    COUNT(*) AS total_posts,
+    SUM(CASE WHEN answer_count >= 1 THEN 1 ELSE 0 END) AS answer_more_than_one,
+    AVG(answer_count) AS average_answers,
+    AVG(view_count) AS average_views,
+    AVG(score) AS average_score
+   
+  FROM
+    `bigquery-public-data.stackoverflow.posts_questions`
+  WHERE 
+    LOWER(tags) LIKE '%java%'
+)
+SELECT 
+  'JavaScript' AS description,
+  total_posts,
+  answer_more_than_one,
+  average_answers,
+  average_views,
+  average_score
+FROM 
+  javascript_posts
+UNION ALL
+SELECT 
+  'Java' AS description,
+  total_posts,
+  answer_more_than_one,
+  average_answers,
+  average_views,
+  average_score
+FROM 
+  java_posts;
