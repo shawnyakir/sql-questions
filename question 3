@@ -1,0 +1,11 @@
+SELECT
+  FORMAT_DATE('%A', creation_date) AS weekday,
+  COUNT(*) AS total_posts
+FROM
+  `bigquery-public-data.stackoverflow.posts_questions`
+WHERE
+  LOWER(tags) LIKE '%javascript%'
+GROUP BY
+  weekday
+ORDER BY
+  weekday;
