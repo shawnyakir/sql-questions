@@ -1,0 +1,14 @@
+with combined_posts AS(
+ SELECT tags,score,id,title
+ FROM `bigquery-public-data.stackoverflow.posts_answers` 
+ WHERE  LOWER(tags) LIKE '%javascript%'
+ UNION ALL
+ SELECT tags,score,id,title
+ FROM `bigquery-public-data.stackoverflow.posts_questions`
+ WHERE  LOWER(tags) LIKE '%javascript%'
+)
+select id, title, tags, score, COUNT(*) OVER () AS num_results
+FROM combined_posts
+ORDER BY score DESC;
+
+
