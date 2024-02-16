@@ -1,13 +1,13 @@
 with combined_posts AS(
- SELECT tags,score,id,title
+ SELECT tags,score,id,title,null as answer_count
  FROM `bigquery-public-data.stackoverflow.posts_answers` 
  WHERE  LOWER(tags) LIKE '%javascript%'
  UNION ALL
- SELECT tags,score,id,title
- FROM `bigquery-public-data.stackoverflow.posts_questions`
+ SELECT tags,score,id,title,answer_count
+  FROM `bigquery-public-data.stackoverflow.posts_questions`
  WHERE  LOWER(tags) LIKE '%javascript%'
 )
-select id, title, tags, score, COUNT(*) OVER () AS num_results
+select id, title, tags, score, answer_count
 FROM combined_posts
 ORDER BY score DESC;
 
